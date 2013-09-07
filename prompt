@@ -1,0 +1,48 @@
+#!/bin/zsh
+
+# include color stuff and prompt updating stuff
+setopt prompt_subst
+autoload colors    
+colors
+
+# set some colors
+for COLOR in RED GREEN YELLOW WHITE BLACK CYAN; do
+    eval PR_$COLOR='%{$fg[${(L)COLOR}]%}'         
+    eval PR_BRIGHT_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
+done                                                 
+PR_RESET="%{${reset_color}%}";  
+
+autoload -Uz vcs_info
+
+#zstyle ':vcs_info:*' enable svn git
+#zstyle ':vcs_info:*:prompt:*' check-for-changes true
+#zstyle ':vcs_info:*:prompt:*' unstagedstr   '¹'  # display ¹ if there are unstaged changes
+#zstyle ':vcs_info:*:prompt:*' stagedstr     '²'  # display ² if there are staged changes
+#zstyle ':vcs_info:*' actionformats "(%s)-[%b|%a:%c-%u]"
+#zstyle ':vcs_info:*' formats "(%s)-[%b]"
+#zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b|%r'
+
+precmd() {
+    psvar=()
+    #vcs_info
+    #[[ -n $vcs_info_msg_0_ ]] && psvar[1]="$vcs_info_msg_0_"
+}
+PR_VIMODE="%(#.#.$)"
+PR_VICOLOR=${PR_BLUE}                                                                
+function zle-line-init zle-keymap-select {                                           
+    PR_VIMODE="${${KEYMAP/vicmd/¢}/(main|viins)/%(#.#.$)}"                              
+    PR_VICOLOR="${${KEYMAP/vicmd/${PR_RED}}/(main|viins)/${PR_GREEN}}"           
+    zle reset-prompt                                                             
+}                                                                                    
+zle -N zle-line-init                                                                 
+zle -N zle-keymap-select   
+
+if [ -f ~/.vcs_prompt ]; then
+    . ~/.vcs_prompt
+fi
+
+export PS1="%(?.${PR_GREEN}.${PR_BRIGHT_RED})[${PR_BRIGHT_CYAN}%n${PR_BRIGHT_YELLOW}@${PR_BRIGHT_CYAN}%m%(?.${PR_GREEN}.${PR_BRIGHT_RED}):${PR_BRIGHT_YELLOW}%c${PR_RESET}%(?.${PR_GREEN}.${PR_BRIGHT_RED})%(?.${PR_GREEN}.${PR_BRIGHT_RED})]"$'${PR_VIMODE}'"${PR_RESET} "
+
+export RPROMPT="%1v"
+#export RPROMPT=$'$(ps_scm_f)'
+

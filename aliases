@@ -1,0 +1,32 @@
+#!/bin/zsh
+# This file contains aliases for the zsh shell
+
+case $PLATFORM in
+  mac)
+    alias -g sed='gsed'
+    alias -g find='gfind'
+    alias -g ls='gls --color'
+    ;;
+  linux)
+    alias -g ls='ls --color'
+    ;;
+esac
+
+# some more ls aliases
+alias -g li='ls -l'
+alias -g ll='ls -lh'
+alias -g la='ls -A'
+alias -g lh='ls -ad .*'
+alias -g lia='ls -lA'
+alias -g lih='ls -lad .*'
+alias -g lla='ls -lhA'
+alias -g llh='ls -lhad .*'
+
+# script/source editing aliases
+alias -g johncoms='cat ~/.john_commands'
+alias -g paccoms='cat ~/.pacman_commands'
+alias -g vimcoms='cat ~/.vim_commands'
+alias -g wpacoms='cat ~/.wpacrack_commands'
+alias -g wepcoms='cat ~/.wepcrack_commands'
+alias -g coms='cat ~/.commands'
+alias -g ch=' ch; if [ $? = 0 ];then history -c; fi'

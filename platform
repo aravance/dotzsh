@@ -1,0 +1,14 @@
+#!/bin/zsh
+
+uname=`uname`
+case $uname:l in
+  darwin)
+    PLATFORM=mac
+    ;;
+  linux)
+    PLATFORM=linux
+    ;;
+  *)
+    PLATFORM=unknown
+esac
+export PLATFORM
