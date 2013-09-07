@@ -4,10 +4,8 @@ export VISUAL=$EDITOR
 
 export HISTFILE
 
-[ -f $HOME/.zsh.d/sshagent ] && . $HOME/.zsh.d/sshagent
-
-if [ -d $HOME/.zsh.d/completion ];then
-    fpath=($HOME/.zsh.d/completion $fpath)
+if [ -d $ZSHD/completion ];then
+    fpath=($ZSHD/completion $fpath)
     autoload -U compinit
     compinit
 fi

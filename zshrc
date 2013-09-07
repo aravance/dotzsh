@@ -1,12 +1,15 @@
 #!/bin/zsh
 
-if [ -f $HOME/.zsh.d/platform ];then
-  . $HOME/.zsh.d/platform
+export ZSHD=~/.zsh.d
+
+if [ -f $ZSHD/platform ];then
+  . $ZSHD/platform
 else
   export PLATFORM=unknown
 fi
 
-[ -f $HOME/.zsh.d/$PLATFORM ] && . $HOME/.zsh.d/$PLATFORM
+[ -f $ZSHD/$PLATFORM ] && . $ZSHD/$PLATFORM
+
 
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
@@ -99,10 +102,11 @@ zstyle ':completion:*' ignore-parents parent pwd
 setopt histignorealldups histnostore incappendhistory correct
 
 [ -f /etc/profile ] && . /etc/profile
-#[ -f $HOME/.zsh.d/s60_prompt ] && . $HOME/.zsh.d/s60_prompt
-[ -f $HOME/.zsh.d/prompt ] && . $HOME/.zsh.d/prompt
-[ -f $HOME/.zsh.d/aliases ] && . $HOME/.zsh.d/aliases
-[ -f $HOME/.zsh.d/addon ] && . $HOME/.zsh.d/addon
+#[ -f $ZSHD/s60_prompt ] && . $ZSHD/s60_prompt
+[ -f $ZSHD/prompt ] && . $ZSHD/prompt
+[ -f $ZSHD/aliases ] && . $ZSHD/aliases
+[ -f $ZSHD/addon ] && . $ZSHD/addon
+[ -f $ZSHD/sshagent ] && . $ZSHD/sshagent
 
 [ -f /usr/share/cdargs/cdargs-zsh.sh ] && . /usr/share/cdargs/cdargs-zsh.sh
 [ -f /opt/local/etc/profile.d/cdargs-bash.sh ] && source /opt/local/etc/profile.d/cdargs-bash.sh
