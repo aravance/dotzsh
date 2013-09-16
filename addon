@@ -4,6 +4,8 @@ export VISUAL=$EDITOR
 
 export HISTFILE
 
+PATH="~/.bin:$PATH"
+
 if [ -d $ZSHD/completion ];then
     fpath=($ZSHD/completion $fpath)
     autoload -U compinit
