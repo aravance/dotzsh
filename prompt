@@ -27,10 +27,10 @@ precmd() {
     #vcs_info
     #[[ -n $vcs_info_msg_0_ ]] && psvar[1]="$vcs_info_msg_0_"
 }
-PR_VIMODE="%(#.#.$)"
+PR_VIMODE="%#"
 PR_VICOLOR=${PR_BLUE}                                                                
 function zle-line-init zle-keymap-select {                                           
-    PR_VIMODE="${${KEYMAP/vicmd/¢}/(main|viins)/%(#.#.$)}"                              
+    PR_VIMODE="${${KEYMAP/vicmd/ß}/(main|viins)/%#}"                              
     PR_VICOLOR="${${KEYMAP/vicmd/${PR_RED}}/(main|viins)/${PR_GREEN}}"           
     zle reset-prompt                                                             
 }                                                                                    
