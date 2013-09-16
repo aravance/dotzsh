@@ -16,11 +16,11 @@ esac
 alias -g li='ls -l'
 alias -g ll='ls -lh'
 alias -g la='ls -A'
-alias -g lh='ls -ad .*'
+alias -g lh='ls -A --ignore="*"'
 alias -g lia='ls -lA'
 alias -g lih='ls -lad .*'
 alias -g lla='ls -lhA'
-alias -g llh='ls -lhad .*'
+alias -g llh='ls -lhA --ignore="*"'
 
 # script/source editing aliases
 alias -g johncoms='cat ~/.john_commands'
