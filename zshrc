@@ -34,6 +34,7 @@ esac
 
 #[ -f $ZSHD/s60_prompt ] && . $ZSHD/s60_prompt
 [ -f $ZSHD/prompt ] && . $ZSHD/prompt
+[ -f $ZSHD/vcs_prompt ] && . $ZSHD/vcs_prompt
 [ -f $ZSHD/aliases ] && . $ZSHD/aliases
 [ -f $ZSHD/addon ] && . $ZSHD/addon
 [ -f $ZSHD/sshagent ] && . $ZSHD/sshagent
