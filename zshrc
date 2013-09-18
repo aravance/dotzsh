@@ -1,7 +1,5 @@
 #!/usr/bin/zsh
 
-[ -f $ZSHD/$PLATFORM ] && . $ZSHD/$PLATFORM
-
 export ZSHD=~/.zsh.d
 
 if [ -f $ZSHD/platform ];then
@@ -9,6 +7,8 @@ if [ -f $ZSHD/platform ];then
 else
   export PLATFORM=unknown
 fi
+
+[ -f $ZSHD/$PLATFORM ] && . $ZSHD/$PLATFORM
 
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
