@@ -24,10 +24,10 @@ case $PLATFORM in
     plugins=(git svn osx macports)
     ;;
   linux)
-    plugins=(git git-extras svn repo ant mvn)
+    plugins=(git git-extras svn repo)
     ;;
   *)
-    plugins=(git git-extras svn repo ant mvn)
+    plugins=(git git-extras svn repo)
 esac
 
 [ -f $ZSH/oh-my-zsh.sh ] && . $ZSH/oh-my-zsh.sh

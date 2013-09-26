@@ -30,5 +30,3 @@ alias -g wpacoms='cat ~/.wpacrack_commands'
 alias -g wepcoms='cat ~/.wepcrack_commands'
 alias -g coms='cat ~/.commands'
 alias -g ch=' ch; if [ $? = 0 ];then history -c; fi'
-
-which mvn-color &>/dev/null && alias -g mvn='mvn-color'
