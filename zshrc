@@ -38,6 +38,7 @@ esac
 [ -f $ZSHD/aliases ] && . $ZSHD/aliases
 [ -f $ZSHD/addon ] && . $ZSHD/addon
 [ -f $ZSHD/sshagent ] && . $ZSHD/sshagent
+[ -f $ZSHD/mvn-color ] && . $ZSHD/mvn-color
 
 [ -f /usr/share/cdargs/cdargs-zsh.sh ] && . /usr/share/cdargs/cdargs-zsh.sh
 [ -f /opt/local/etc/profile.d/cdargs-bash.sh ] && source /opt/local/etc/profile.d/cdargs-bash.sh
