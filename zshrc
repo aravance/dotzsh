@@ -2,33 +2,26 @@
 
 export ZSHD=~/.zsh.d
 
-if [ -f $ZSHD/platform ];then
-  . $ZSHD/platform
-else
-  export PLATFORM=unknown
-fi
+[ -f $ZSHD/platform ] \
+  && . $ZSHD/platform \
+  || export PLATFORM=unknown
 
 [ -f $ZSHD/$PLATFORM ] && . $ZSHD/$PLATFORM
 
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
+ZSH_CUSTOM=$ZSHD
 
 # Set name of the theme to load. Look in ~/.oh-my-zsh/themes/
 ZSH_THEME="robbyrussell"
 
+mac_plugins=(osx macports gnu-utils)
+
 # Plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-case $PLATFORM in
-  mac)
-    plugins=(git svn osx macports)
-    ;;
-  linux)
-    plugins=(git git-extras svn repo)
-    ;;
-  *)
-    plugins=(git git-extras svn repo)
-esac
+plugins=(git git-extras svn repo)
+eval plugins+=\(\$${PLATFORM}_plugins\)
 
 [ -f $ZSH/oh-my-zsh.sh ] && . $ZSH/oh-my-zsh.sh
 
@@ -68,7 +61,6 @@ zstyle ':completion:*' select-prompt %SScrolling active: current selection at %l
 zstyle ':completion:*' squeeze-slashes true
 zstyle ':completion:*' substitute 1
 zstyle ':completion:*' verbose true
-zstyle :compinstall filename '/home/radadev/.zshrc'
 
 autoload -Uz compinit
 compinit
@@ -117,3 +109,6 @@ zkbd_file=${ZDOTDIR:-$HOME}/.zkbd/$TERM-$VENDOR-$OSTYPE
 #completion in the middle of a line
 bindkey '^i' expand-or-complete-prefix
 
+# the gnu-utils plugin doesn't seem to finish loading
+# force it to refresh
+hash -r
