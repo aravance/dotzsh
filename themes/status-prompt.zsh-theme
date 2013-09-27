@@ -14,6 +14,7 @@ autoload -Uz vcs_info
 
 local YELLOW="%{$fg_bold[yellow]%}"
 local GREEN="%{$fg_bold[green]%}"
+local MAGENTA="%{$fg_bold[magenta]%}"
 
 zstyle ':vcs_info:*' enable svn git
 zstyle ':vcs_info:*' check-for-changes true
@@ -43,6 +44,6 @@ precmd() {
 
 RPROMPT=$'$vcs_info_msg_0_'
 
-ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="%{$MAGENTA%}↓%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="%{$MAGENTA%}↑%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE="%{$MAGENTA%}↕%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="$MAGENTA↓$RESET"
+ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="$MAGENTA↑$RESET"
+ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE="$MAGENTA↕$RESET"
