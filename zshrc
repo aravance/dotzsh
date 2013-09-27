@@ -112,4 +112,6 @@ bindkey '^i' expand-or-complete-prefix
 
 # the gnu-utils plugin doesn't seem to finish loading
 # force it to refresh
-hash -r
+[[ ${plugins[(r)gnu-utils]} == gnu-utils ]] && hash -r
+
+return 0
