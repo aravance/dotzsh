@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 # some more ls aliases
 alias -g ls='ls --color'
