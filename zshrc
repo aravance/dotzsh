@@ -12,6 +12,8 @@ export ZSHD=~/.zsh.d
 ZSH=$HOME/.oh-my-zsh
 ZSH_CUSTOM=$ZSHD
 
+ZSH_THEME=status-prompt
+
 mac_plugins=(osx macports gnu-utils)
 
 # Plugins can be found in ~/.oh-my-zsh/plugins/*
@@ -25,8 +27,6 @@ plugins=(
   adb
   mvn-color
   ls-alias
-  status-prompt
-  vcs-rprompt
   ssh-agent
 )
 eval plugins+=\(\$${PLATFORM}_plugins\)

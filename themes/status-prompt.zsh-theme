@@ -1,13 +1,17 @@
-#!/usr/bin/zsh
+#!/usr/bin/env zsh
 
-# include color stuff and prompt updating stuff
-setopt prompt_subst
-autoload colors    
-colors
+local RESET="%{$reset_color%}"
+
+local STATUS_COLOR="%{%(?.$fg_no_bold[green].$fg_bold[red])%}"
+local USER_COLOR="%{$fg_bold[cyan]%}"
+local AT_COLOR="%{$fg_bold[yellow]%}"
+local HOST_COLOR="%{$fg_bold[cyan]%}"
+local PWD_COLOR="%{$fg_bold[yellow]%}"
+
+PROMPT="${STATUS_COLOR}[${USER_COLOR}%n${AT_COLOR}@${HOST_COLOR}%m${STATUS_COLOR}:${PWD_COLOR}%c${STATUS_COLOR}]%%${RESET} "
 
 autoload -Uz vcs_info
 
-local RESET="%{$reset_color%}"
 local YELLOW="%{$fg_bold[yellow]%}"
 local GREEN="%{$fg_bold[green]%}"
 
@@ -19,7 +23,7 @@ zstyle ':vcs_info:*' stagedstr     "$GREEN●$RESET"
 precmd() {
     local RESET="%{$reset_color%}"
     local RED="%{$fg_bold[red]%}"
-    local CYAN="%{$fg[cyan]%}"
+    local CYAN="%{$fg_no_bold[cyan]%}"
     local BLUE="%{$fg_bold[blue]%}"
 
     local branchstr="$CYAN%b$RESET"
@@ -37,4 +41,4 @@ precmd() {
     vcs_info
 }
 
-export RPROMPT=$'$vcs_info_msg_0_'
+RPROMPT=$'$vcs_info_msg_0_'
