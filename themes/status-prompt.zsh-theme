@@ -31,14 +31,18 @@ precmd() {
     local repostr="$BLUE%r$RESET"
 
     if [[ -z $(git ls-files --other --exclude-standard 2>/dev/null) ]];then
-      zstyle ':vcs_info:*' formats "[$repostr:$branchstr%c%u]"
-      zstyle ':vcs_info:*' actionformats "[$repostr:$branchstr%c%u|%a]"
+      zstyle ':vcs_info:*' formats "[$repostr:$branchstr$(git_remote_status)%c%u]"
+      zstyle ':vcs_info:*' actionformats "[$repostr:$branchstr$(git_remote_status)%c%u|%a]"
     else
-      zstyle ':vcs_info:*' formats "[$repostr:$branchstr%c%u$untrackedstr]"
-      zstyle ':vcs_info:*' actionformats "[$repostr:$branchstr%c%u$untrackedstr|%a]"
+      zstyle ':vcs_info:*' formats "[$repostr:$branchstr$(git_remote_status)%c%u$untrackedstr]"
+      zstyle ':vcs_info:*' actionformats "[$repostr:$branchstr%c%u$(git_remote_status)$untrackedstr|%a]"
     fi
 
     vcs_info
 }
 
 RPROMPT=$'$vcs_info_msg_0_'
+
+ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="%{$MAGENTA%}↓%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="%{$MAGENTA%}↑%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE="%{$MAGENTA%}↕%{$reset_color%}"
