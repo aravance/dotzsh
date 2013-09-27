@@ -1,5 +1,29 @@
 #!/usr/bin/env zsh
 
+function zle-keymap-select zle-line-init zle-line-finish {
+  # The terminal must be in application mode when ZLE is active for $terminfo
+  # values to be valid.
+  if (( ${+terminfo[smkx]} )); then
+    printf '%s' ${terminfo[smkx]}
+  fi
+  if (( ${+terminfo[rmkx]} )); then
+    printf '%s' ${terminfo[rmkx]}
+  fi
+
+  zle reset-prompt
+  zle -R
+}
+
+zle -N zle-line-init
+zle -N zle-line-finish
+zle -N zle-keymap-select
+
+bindkey -v
+
+function vi_mode_prompt_info() {
+  echo "${${KEYMAP/vicmd/ß}/(main|viins)/%#}"
+}
+
 local reset="%{$reset_color%}"
 local cyan="%{$fg_bold[cyan]%}"
 local yellow="%{$fg_bold[yellow]%}"
@@ -14,7 +38,7 @@ local at="${yellow}@${reset}"
 local host="${cyan}%m${reset}"
 local on="${status_color}:${reset}"
 local cwd="${blue}%1~${reset}"
-local suffix="${status_color}]%#${reset}"
+local suffix="${status_color}]"$'$(vi_mode_prompt_info)'"${reset}"
 
 PROMPT="${prefix}${user}${at}${host}${on}${cwd}${suffix} "
 unset status_color prefix user at host on cwd suffix
