@@ -1,35 +1,40 @@
 #!/usr/bin/env zsh
 
-local RESET="%{$reset_color%}"
+local reset="%{$reset_color%}"
+local cyan="%{$fg_bold[cyan]%}"
+local yellow="%{$fg_bold[yellow]%}"
+local blue="%{$fg_bold[blue]%}"
+local green="%{$fg_bold[green]%}"
+local magenta="%{$fg_bold[magenta]%}"
+local status_color="%{%(?.$fg_no_bold[green].$fg_bold[red])%}"
 
-local STATUS_COLOR="%{%(?.$fg_no_bold[green].$fg_bold[red])%}"
-local USER_COLOR="%{$fg_bold[cyan]%}"
-local AT_COLOR="%{$fg_bold[yellow]%}"
-local HOST_COLOR="%{$fg_bold[cyan]%}"
-local PWD_COLOR="%{$fg_bold[yellow]%}"
+local prefix="${status_color}[${reset}"
+local user="${cyan}%n${reset}"
+local at="${yellow}@${reset}"
+local host="${cyan}%m${reset}"
+local on="${status_color}:${reset}"
+local cwd="${blue}%1~${reset}"
+local suffix="${status_color}]%#${reset}"
 
-PROMPT="${STATUS_COLOR}[${USER_COLOR}%n${AT_COLOR}@${HOST_COLOR}%m${STATUS_COLOR}:${PWD_COLOR}%c${STATUS_COLOR}]%%${RESET} "
+PROMPT="${prefix}${user}${at}${host}${on}${cwd}${suffix} "
+unset status_color prefix user at host on cwd suffix
 
 autoload -Uz vcs_info
 
-local YELLOW="%{$fg_bold[yellow]%}"
-local GREEN="%{$fg_bold[green]%}"
-local MAGENTA="%{$fg_bold[magenta]%}"
-
 zstyle ':vcs_info:*' enable svn git
 zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' unstagedstr   "$YELLOW●$RESET"
-zstyle ':vcs_info:*' stagedstr     "$GREEN●$RESET"
+zstyle ':vcs_info:*' unstagedstr   "$yellow●$reset"
+zstyle ':vcs_info:*' stagedstr     "$green●$reset"
 
 precmd() {
-    local RESET="%{$reset_color%}"
-    local RED="%{$fg_bold[red]%}"
-    local CYAN="%{$fg_no_bold[cyan]%}"
-    local BLUE="%{$fg_bold[blue]%}"
+    local reset="%{$reset_color%}"
+    local red="%{$fg_bold[red]%}"
+    local cyan="%{$fg_no_bold[cyan]%}"
+    local blue="%{$fg_bold[blue]%}"
 
-    local branchstr="$CYAN%b$RESET"
-    local untrackedstr="$RED●$RESET"
-    local repostr="$BLUE%r$RESET"
+    local branchstr="$cyan%b$reset"
+    local untrackedstr="$red●$reset"
+    local repostr="$blue%r$reset"
 
     if [[ -z $(git ls-files --other --exclude-standard 2>/dev/null) ]];then
       zstyle ':vcs_info:*' formats "[$repostr:$(git_remote_status)$branchstr%c%u]"
@@ -44,6 +49,8 @@ precmd() {
 
 RPROMPT=$'$vcs_info_msg_0_'
 
-ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="$MAGENTA↓$RESET"
-ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="$MAGENTA↑$RESET"
-ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE="$MAGENTA↕$RESET"
+ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="$magenta↓$reset"
+ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="$magenta↑$reset"
+ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE="$magenta↕$reset"
+
+unset reset cyan yellow blue green magenta status_color
