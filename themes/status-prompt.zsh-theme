@@ -32,11 +32,11 @@ precmd() {
     local repostr="$BLUE%r$RESET"
 
     if [[ -z $(git ls-files --other --exclude-standard 2>/dev/null) ]];then
-      zstyle ':vcs_info:*' formats "[$repostr:$branchstr$(git_remote_status)%c%u]"
-      zstyle ':vcs_info:*' actionformats "[$repostr:$branchstr$(git_remote_status)%c%u|%a]"
+      zstyle ':vcs_info:*' formats "[$repostr:$(git_remote_status)$branchstr%c%u]"
+      zstyle ':vcs_info:*' actionformats "[$repostr:$(git_remote_status)$branchstr%c%u|%a]"
     else
-      zstyle ':vcs_info:*' formats "[$repostr:$branchstr$(git_remote_status)%c%u$untrackedstr]"
-      zstyle ':vcs_info:*' actionformats "[$repostr:$branchstr%c%u$(git_remote_status)$untrackedstr|%a]"
+      zstyle ':vcs_info:*' formats "[$repostr:$(git_remote_status)$branchstr%c%u$untrackedstr]"
+      zstyle ':vcs_info:*' actionformats "[$repostr:$(git_remote_status)$branchstr%c%u$untrackedstr|%a]"
     fi
 
     vcs_info
