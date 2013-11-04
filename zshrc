@@ -13,6 +13,8 @@ ZSH=$HOME/.oh-my-zsh
 ZSH_CUSTOM=$ZSHD
 
 ZSH_THEME=status-prompt
+#ZSH_THEME=theunraveler
+#ZSH_THEME=random
 
 mac_plugins=(osx macports gnu-utils)
 
