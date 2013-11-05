@@ -96,11 +96,11 @@ git_prompt() {
   green="%{$fg_no_bold[green]%}"
   reset="%{$reset_color%}"
 
-  repo="$blue$(basename $repo)$reset"
-  ref="$green${ref#refs/heads/}$reset"
+  repo="${blue}$(basename $repo)${reset}"
+  ref="${green}${ref#refs/heads/}${reset}"
   remote="$(git_remote_status)"
   files="$(git_prompt_status)"
-  echo "[$repo:$ref$remote${state:+|$state}$files]"
+  echo "[${repo}:${remote}${ref}${state:+|$state}${files}]"
 }
 
 RPROMPT='$(git_prompt)'
