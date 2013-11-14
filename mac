@@ -1,3 +1,10 @@
 #!/usr/bin/env zsh
 
+ANDROID_SDK=/opt/android-sdk
+ANDROID_BUILD_TOOLS_VERSION=19.0.0
+
+PATH=$ANDROID_SDK/tools:$PATH
+PATH=$ANDROID_SDK/platform-tools:$PATH
+PATH=$ANDROID_SDK/build-tools/$ANDROID_BUILD_TOOLS_VERSION:$PATH
+
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
