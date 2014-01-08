@@ -12,7 +12,8 @@ export ZSHD=~/.zsh.d
 ZSH=$HOME/.oh-my-zsh
 ZSH_CUSTOM=$ZSHD
 
-ZSH_THEME=status-prompt
+ZSH_THEME=time
+#ZSH_THEME=status-prompt
 #ZSH_THEME=theunraveler
 #ZSH_THEME=random
 
@@ -27,10 +28,11 @@ plugins=(
   svn
   repo
   adb
-  mvn-color
   ls-alias
   ls-color
   ssh-agent
+  battery
+  spectrum
 )
 eval plugins+=\(\$${PLATFORM}_plugins\)
 
