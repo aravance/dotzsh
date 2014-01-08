@@ -1,10 +1,11 @@
 #!/usr/bin/env zsh
 
-battery_indicator() {
+function battery_prompt_indicator {
   local size
   [ -z $BATTERY_INDICATOR_SIZE ] \
     && size=10 \
     || size=$BATTERY_INDICATOR_SIZE
+  (( $size <= 1 )) && size=10
   local chrg=▮
   local uchrg=▯
 
@@ -34,7 +35,8 @@ battery_indicator() {
     && uchrg=▹
   [ ! -z $DEBUG_BATTERY_INDICATOR ] && echo "$color $charging $pct $reset" && return
   for i in {1..$size};do
-    (( ($i*100/$size) < $pct )) \
+    # At >95%, show a full charge indicator
+    (( pct > 95 || (i*100/size) < pct )) \
       && indicator+=$chrg \
       || indicator+=$uchrg
   done
@@ -42,7 +44,7 @@ battery_indicator() {
   echo "$color$indicator$reset"
 }
 
-git_prompt() {
+function git_prompt {
   local repo head state remote ref
 
   repo=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -71,21 +73,44 @@ git_prompt() {
     fi
   fi
 
-  [ -f "$head" ] && ref="$(cat "$head")" || \
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || \
-    ref=$(git rev-parse --short HEAD 2> /dev/null)
+  [ -f "$head" ] && ref="$(cat "$head")" \
+    || ref=$(git symbolic-ref HEAD 2> /dev/null) \
+    || ref=$(git rev-parse --short HEAD 2> /dev/null)
 
-  local color reset
-  color="%{$fg_no_bold[yellow]%}"
+  prefix="$ZSH_THEME_GIT_PROMPT_PREFIX"
+  suffix="$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  b_color="%{$ZSH_THEME_GIT_PROMPT_BRANCH_COLOR%}"
+  s_color="%{$ZSH_THEME_GIT_PROMPT_STATE_COLOR%}"
   reset="%{$reset_color%}"
 
-  ref="${color}${ref#refs/heads/}${reset}"
+  ref="${ref#refs/heads/}"
   remote="$(git_remote_status)"
   files="$(git_prompt_status)"
-  echo "${remote}${ref}${state:+|$state}${files}"
+  echo "${prefix}${remote}${b_color}${ref}${reset}${state:+|$s_color$state$reset}${files}${suffix}"
 }
 
-setup_prompt() {
+#function put_prompt_spacing {
+#  function clean {
+#    local zero='%([BSUbfksu]|([FB]|){*})'
+#    echo ${(S%%)1//$~zero/}
+#  }
+#  local len=$COLUMNS
+#  local bat=$(battery_prompt_indicator)
+#  args=("$USER" " at " "${HOST/.*/}" " in " "${PWD/#$HOME/~}" "$(git_prompt)" "$(clean $bat)")
+#  echo $args > ~/.debug
+#  for arg in $args;do
+#    echo $arg - ${#arg} >> ~/.debug
+#    len=$(($len - ${#arg}))
+#  done
+#  # Start at 2 to make it a little shorter
+#  for i in {2..$len};do
+#    spacing=\ $spacing
+#  done
+#  echo $spacing
+#}
+
+# Wrap in an anonymous function so local variables don't escape
+function {
   local reset="%{$reset_color%}"
   local red="%{$fg_bold[red]%}"
   local cyan="%{$fg_bold[cyan]%}"
@@ -95,18 +120,25 @@ setup_prompt() {
   local magenta="%{$fg_bold[magenta]%}"
   local status_color="%{%(?.$fg_no_bold[green].$fg_bold[red])%}"
 
-  local prefix=""
+  local prefix=$'\n'
   local user="${fg_no_bold[magenta]}%n${reset}"
-  local at=" at "
+  local _at_=" at "
   local host="${fg_no_bold[cyan]}%m${reset}"
-  local on=" in "
-  local cwd="${fg_no_bold[green]}%~${reset}"
-  local suffix=$'\n'"(%*) ${status_color}%#${reset} "
+  local _in_=" in "
+  local cwd="${blue}%~${reset}"
+  local suffix=$'$(git_prompt)\n'"(%*) ${status_color}%#${reset} "
 
   ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="$magenta↓$reset"
   ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="$magenta↑$reset"
   ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE="$magenta↕$reset"
 
+  ZSH_THEME_GIT_PROMPT_PREFIX=" on "
+  ZSH_THEME_GIT_PROMPT_SUFFIX="${reset}"
+  ZSH_THEME_GIT_PROMPT_BRANCH_COLOR="${fg_no_bold[green]}"
+
+  # We're doing our own dirty indicators
+  ZSH_THEME_GIT_PROMPT_DIRTY=""
+  ZSH_THEME_GIT_PROMPT_CLEAN=""
   ZSH_THEME_GIT_PROMPT_ADDED="$green+$reset"
   ZSH_THEME_GIT_PROMPT_MODIFIED="$yellow●$reset"
   ZSH_THEME_GIT_PROMPT_DELETED="$red✗$reset"
@@ -114,17 +146,8 @@ setup_prompt() {
   ZSH_THEME_GIT_PROMPT_UNMERGED="$magenta✂$reset"
   ZSH_THEME_GIT_PROMPT_UNTRACKED="$red✱$reset"
 
-  local git_prompt=$'$(                      \
-    function {                               \
-      local result=$(git_prompt)             \
-      [ ! -z $result ] && echo " on $result" \
-    }                                        \
-  )'
-
-  PROMPT=${prefix}${user}${at}${host}${on}${cwd}${git_prompt}${suffix}
+  PROMPT=${prefix}${user}${_at_}${host}${_in_}${cwd}${suffix}
 }
-setup_prompt
-unfunction setup_prompt
 
 # This enables the clock in the prompt to tick
 TMOUT=1
@@ -132,4 +155,5 @@ TRAPALRM() {
   zle reset-prompt
 }
 
-RPROMPT='$(battery_indicator)'
+RPROMPT=$'$(battery_prompt_indicator)'
+#RPROMPT='%D{%a %b %f}'
