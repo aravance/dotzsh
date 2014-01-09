@@ -1,5 +1,29 @@
 #!/usr/bin/env zsh
 
+function zle-keymap-select zle-line-init zle-line-finish {
+  # The terminal must be in application mode when ZLE is active for $terminfo
+  # values to be valid.
+  if (( ${+terminfo[smkx]} ));then
+    printf '%s' ${terminfo[smkx]}
+  fi
+  if (( ${+terminfo[rmkx]} ));then
+    printf '%s' ${terminfo[rmkx]}
+  fi
+
+  zle reset-prompt
+  zle -R
+}
+
+# Update when line is initially created
+zle -N zle-line-init
+# Update when a command is finished
+zle -N zle-line-finish
+# Update when entering vi mode
+zle -N zle-keymap-select
+
+# Force viins as the default mode
+bindkey -v
+
 function battery_prompt_indicator {
   local size
   [ -z $BATTERY_INDICATOR_SIZE ] \
@@ -126,7 +150,12 @@ function {
   local host="${fg_no_bold[cyan]}%m${reset}"
   local _in_=" in "
   local cwd="${blue}%~${reset}"
-  local suffix=$'$(git_prompt)\n'"(%*) ${status_color}%#${reset} "
+  local prompt_char=$'$(
+    function {
+      echo "${${KEYMAP/vicmd/ß}/(main|viins)/%#}"
+    }
+  )'
+  local suffix=$'$(git_prompt)\n'"(%*) ${status_color}${prompt_char}${reset} "
 
   ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="$magenta↓$reset"
   ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="$magenta↑$reset"
