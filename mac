@@ -8,4 +8,4 @@ if ! [ -z "$ANDROID_HOME" ];then
   PATH=$ANDROID_HOME/build-tools/$ANDROID_BUILD_TOOLS_VERSION:$PATH
 fi
 
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+export PATH=/opt/local/libexec/gnubin/:/opt/local/bin:/opt/local/sbin:$PATH
