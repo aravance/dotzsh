@@ -77,7 +77,12 @@ SAVEHIST=1000
 setopt appendhistory autocd extendedglob notify
 unsetopt beep nomatch
 unsetopt hist_verify
+
+# Enable vimode bindings
 bindkey -v
+# Decrease mode switch delay to 0.1s
+export KEYTIMEOUT=1
+
 # End of lines configured by zsh-newuser-install
 zstyle ':completion:*:functions' ignored-patterns '_*'
 zstyle ':completion:*:*:kill:*' menu yes select
