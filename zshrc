@@ -114,6 +114,10 @@ zkbd_file=${ZDOTDIR:-$HOME}/.zkbd/$TERM-$VENDOR-$OSTYPE
 #completion in the middle of a line
 bindkey '^i' expand-or-complete-prefix
 
+bindkey -M menuselect '/' accept-and-infer-next-history
+bindkey -M menuselect '^F' accept-and-infer-next-history
+bindkey -M menuselect "${key[Backspace]}" undo
+
 # the gnu-utils plugin doesn't seem to finish loading
 # force it to refresh
 [[ ${plugins[(r)gnu-utils]} == gnu-utils ]] && hash -r
