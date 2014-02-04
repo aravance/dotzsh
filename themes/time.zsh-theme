@@ -3,12 +3,8 @@
 function zle-keymap-select zle-line-init zle-line-finish {
   # The terminal must be in application mode when ZLE is active for $terminfo
   # values to be valid.
-  if (( ${+terminfo[smkx]} ));then
-    printf '%s' ${terminfo[smkx]}
-  fi
-  if (( ${+terminfo[rmkx]} ));then
-    printf '%s' ${terminfo[rmkx]}
-  fi
+  (( ${+terminfo[smkx]} )) && printf '%s' ${terminfo[smkx]}
+  (( ${+terminfo[rmkx]} )) && printf '%s' ${terminfo[rmkx]}
 
   zle reset-prompt
   zle -R
@@ -24,7 +20,7 @@ zle -N zle-keymap-select
 # Force viins as the default mode
 bindkey -v
 
-function battery_prompt_indicator {
+function _battery_prompt_indicator {
   local size
   [ -z $BATTERY_INDICATOR_SIZE ] \
     && size=10 \
@@ -41,16 +37,10 @@ function battery_prompt_indicator {
 
   local color=$green
   local charging=false
-  if [[ -z $pct ]];then
-    return
-  elif [[ $pct == External ]];then
-    color=$green
-    charging=true
-  elif (( $pct <= 20 ));then
-    color=$red
-  elif (( $pct <= 40));then
-    color=$yellow
-  fi
+  [[ -z $pct ]] && return
+  ([[ $pct == External ]] && (color=$green;charging=true)) \
+    || ((( $pct <= 40)) && color=$yellow) \
+    || ((( $pct <= 20 )) && color=$red)
 
   local indicator
   $charging \
@@ -68,7 +58,7 @@ function battery_prompt_indicator {
   echo "$color$indicator$reset"
 }
 
-function git_prompt {
+function _git_prompt {
   local repo head state remote ref
 
   repo=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -119,8 +109,8 @@ function git_prompt {
 #    echo ${(S%%)1//$~zero/}
 #  }
 #  local len=$COLUMNS
-#  local bat=$(battery_prompt_indicator)
-#  args=("$USER" " at " "${HOST/.*/}" " in " "${PWD/#$HOME/~}" "$(git_prompt)" "$(clean $bat)")
+#  local bat=$(_battery_prompt_indicator)
+#  args=("$USER" " at " "${HOST/.*/}" " in " "${PWD/#$HOME/~}" "$(_git_prompt)" "$(clean $bat)")
 #  echo $args > ~/.debug
 #  for arg in $args;do
 #    echo $arg - ${#arg} >> ~/.debug
@@ -155,7 +145,7 @@ function {
       echo "${${KEYMAP/vicmd/ß}/(main|viins)/%#}"
     }
   )'
-  local suffix=$'$(git_prompt)\n'"(%*) ${status_color}${prompt_char}${reset} "
+  local suffix=$'$(_git_prompt)\n'"(%*) ${status_color}${prompt_char}${reset} "
 
   ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="$magenta↓$reset"
   ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="$magenta↑$reset"
@@ -184,5 +174,5 @@ TRAPALRM() {
   zle reset-prompt
 }
 
-RPROMPT=$'$(battery_prompt_indicator)'
+RPROMPT=$'$(_battery_prompt_indicator)'
 #RPROMPT='%D{%a %b %f}'
