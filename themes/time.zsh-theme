@@ -38,9 +38,14 @@ function _battery_prompt_indicator {
   local color=$green
   local charging=false
   [[ -z $pct ]] && return
-  ([[ $pct == External ]] && (color=$green;charging=true)) \
-    || ((( $pct <= 40)) && color=$yellow) \
-    || ((( $pct <= 20 )) && color=$red)
+  if [[ $pct == External ]];then
+    color=$green
+    charging=true
+  elif (( $pct <= 20 ));then
+    color=$red
+  elif (( $pct <= 40));then
+    color=$yellow
+  fi
 
   local indicator
   $charging \
