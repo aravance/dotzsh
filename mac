@@ -1,11 +1,29 @@
 #!/usr/bin/env zsh
 
 if ! [ -z "$ANDROID_HOME" ];then
-  ANDROID_BUILD_TOOLS_VERSION=19.0.1
+  ANDROID_BUILD_TOOLS_VERSION=19.0.3
 
   PATH=$ANDROID_HOME/tools:$PATH
   PATH=$ANDROID_HOME/platform-tools:$PATH
   PATH=$ANDROID_HOME/build-tools/$ANDROID_BUILD_TOOLS_VERSION:$PATH
 fi
 
-export PATH=/opt/local/libexec/gnubin/:/opt/local/bin:/opt/local/sbin:$PATH
+MANPATH=`man --path`
+
+if brew --version &>/dev/null;then
+  PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
+  PATH=/usr/local/opt/findutils/libexec/gnubin:$PATH
+  PATH=/usr/local/opt/gnu-sed/libexec/gnubin:$PATH
+  PATH=/usr/local/opt/gnu-tar/libexec/gnubin:$PATH
+  PATH=/usr/local/bin:/usr/local/sbin:$PATH
+
+  MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
+  MANPATH=/usr/local/opt/findutils/libexec/gnuman:$MANPATH
+  MANPATH=/usr/local/opt/gnu-sed/libexec/gnuman:$MANPATH
+elif port version &>/dev/null;then
+  PATH=/opt/local/libexec/gnubin/:$PATH
+  PATH=/opt/local/bin:/opt/local/sbin:$PATH
+fi
+
+export PATH
+export MANPATH

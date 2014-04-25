@@ -17,7 +17,10 @@ ZSH_THEME=time
 #ZSH_THEME=theunraveler
 #ZSH_THEME=random
 
-mac_plugins=(osx macports)
+mac_plugins=(osx)
+
+brew --version &>/dev/null && mac_plugins=($mac_plugins brew)
+port version &>/dev/null && mac_plugins=($mac_plugins macports)
 
 # Plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
