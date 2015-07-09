@@ -8,19 +8,30 @@ export ZSHD=~/.zsh.d
 
 [ -f $ZSHD/$PLATFORM ] && . $ZSHD/$PLATFORM
 
+
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 ZSH_CUSTOM=$ZSHD
 
 ZSH_THEME=time
+ZSH_THEME_TIME_UPDATE_ENABLED=true
 #ZSH_THEME=status-prompt
 #ZSH_THEME=theunraveler
 #ZSH_THEME=random
 
 mac_plugins=(osx)
 
-brew --version &>/dev/null && mac_plugins=($mac_plugins brew)
-port version &>/dev/null && mac_plugins=($mac_plugins macports)
+brew --version &>/dev/null && export HOMEBREW_ENABLED=true
+port version &>/dev/null && export MACPORTS_ENABLED=true
+
+if $MACPORTS_ENABLED;then
+  mac_plugins=($mac_plugins macports)
+fi
+
+if $HOMEBREW_ENABLED;then
+  [ -f $HOME/.github_token ] && export HOMEBREW_GITHUB_API_TOKEN=`cat $HOME/.github_token`
+  mac_plugins=($mac_plugins brew)
+fi
 
 # Plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
@@ -44,7 +55,7 @@ eval plugins+=\(\$${PLATFORM}_plugins\)
 export EDITOR=vim
 export VISUAL=$EDITOR
 
-export PATH="~/.bin:$PATH"
+export PATH="$HOME/.bin:$PATH"
 
 # The following lines were added by compinstall
 

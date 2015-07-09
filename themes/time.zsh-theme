@@ -173,10 +173,15 @@ function {
   PROMPT=${prefix}${user}${_at_}${host}${_in_}${cwd}${suffix}
 }
 
+function _zsh_theme_time_update_enabled {
+  [[ -n $ZSH_THEME_TIME_UPDATE_ENABLED && $ZSH_THEME_TIME_UPDATE_ENABLED != "false" ]] \
+    && ( [[ $ZSH_THEME_TIME_UPDATE_ENABLED = true ]] || (( $ZSH_THEME_TIME_UPDATE_ENABLED )) )
+}
+
 # This enables the clock in the prompt to tick
 TMOUT=1
 TRAPALRM() {
-  zle reset-prompt
+  _zsh_theme_time_update_enabled && zle reset-prompt
 }
 
 RPROMPT=$'$(_battery_prompt_indicator)'
